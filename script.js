@@ -38,7 +38,7 @@ window.addEventListener("load", function() {
     console.log(pilotName, copilotName, fuelLevel, cargoLevel)
    
 
-    formSubmission(document, pilotName, copilotName, fuelLevel, cargoLevel, list);
+    formSubmission(document, list, pilotName, copilotName, fuelLevel, cargoLevel);
    })
    
 });
