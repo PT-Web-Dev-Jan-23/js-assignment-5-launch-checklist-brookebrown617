@@ -3,7 +3,7 @@ require('isomorphic-fetch');
 
 function addDestinationInfo(document, name, diameter, star, distance, moons, imageUrl) {
     let missionTarget = document.getElementById("missionTarget");
-    missionTarget.innerhtml = `
+    missionTarget.innerHTML = `
                 <h2>Mission Destination</h2>
                 <ol>
                     <li>Name: ${name}</li>
@@ -12,49 +12,51 @@ function addDestinationInfo(document, name, diameter, star, distance, moons, ima
                     <li>Distance from Earth: ${distance}</li>
                     <li>Number of Moons: ${moons}</li>
                 </ol>
-                <img src="">`
+                <img src="${imageUrl}">`
 };
 
 function validateInput(testInput) {
    let numberInput = Number(testInput)
     if (testInput === "") {
     return "Empty"
-   } else if (numberInput === String) {
+   } else if (isNaN(numberInput)) {
+    console.log("Not a Number")
     return "Not a Number"
-   } else if (numberInput === Number){
+   } else if (isNaN(numberInput) === false){
+    console.log("Is a Number")
     return "Is a Number"
    }
 }
 
 
 function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
-    const pilotStatus = document.getElementByID("pilotStatus");
-    const copilotStatus = document.getElementByID("copilotStatus");
-    const fuelStatus = document.getElementByID("fuelStatus");
-    const cargoStatus = document.getElementByID("cargoStatus");
+    let pilotStatus = document.getElementById("pilotStatus");
+    let copilotStatus = document.getElementById("copilotStatus");
+    let fuelStatus = document.getElementById("fuelStatus");
+    let cargoStatus = document.getElementById("cargoStatus");
 
     if(validateInput(pilot) === "Empty" || validateInput(copilot) === "Empty" || validateInput(fuelLevel) === "Empty" || validateInput(cargoLevel) === "Empty"){
-        alert("All fields are required!")
+        alert("All fields are required!");
     } else if (validateInput(pilot) === "Is a Number" || validateInput(copilot) === "Is a Number" || validateInput(fuelLevel) === "Not a Number" || validateInput(cargoLevel) === "Not a Number"){
-        alert("Please enter correct information!")
+        alert("Please enter correct information!");
     } else {
         list.style.visibility = "visible";
         pilotStatus.innerhtml = `The Pilot ${pilot} is ready for liftoff!`;
         copilotStatus.innerhtml = `The Copilot ${copilot} is ready for liftoff!`;
-        let launchStatus = document.getElementByID("launchStatus");
-    if((fuelLevel) < 10000 && cargoLevel <= 10000){
+        let launchStatus = document.getElementById("launchStatus");
+    if(fuelLevel < 10000 && cargoLevel <= 10000){
         faultyList.style.visibility = "visible"
         fuelStatus.innerhtml = "Not enough fuel for journey!"
         cargoStatus.innerhtml = "Cargo level is ready for launch!"
         launchStatus.innerhtml = "Shuttle not ready for launch"
         launchStatus.style.color = "red"   
-    } else if ((fuelLevel) >= 10000 && (cargoLevel) > 10000){
+    } else if (fuelLevel >= 10000 && cargoLevel > 10000){
         faultyList.style.visibility = "visible"
         fuelStatus.innerhtml = "Fuel is ready for launch!" 
         cargoStatus.innerhtml = "Cargo Mass is too heavy for launch!";
         launchStatus.style.color = "red";
         launchStatus.innerhtml = "Shuttle not ready for launch!";
-    } else if ((fuelLevel) < 10000 && (cargoLevel) > 10000) {
+    } else if (fuelLevel < 10000 && cargoLevel > 10000) {
         faultyList.style.visibility = "visible"
         fuelStatus.innerhtml = "Not enough fuel for journey!";
         cargoStatus.innerhtml = "Cargo Mass is too heavy for launch!";
@@ -71,7 +73,6 @@ function formSubmission(document, list, pilot, copilot, fuelLevel, cargoLevel) {
 
 async function myFetch() {
     let planetsReturned;
-
     planetsReturned = await fetch("https://handlers.education.launchcode.org/static/planets.json").then( function(response) {
     console.log(response)    
     return response.json();
